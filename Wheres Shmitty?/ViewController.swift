@@ -178,6 +178,9 @@ class CreateEvent: UIViewController {
 }
 
 class ViewController: UIViewController {
+    
+    let socket = SocketIOClient(socketURL: "http://localhost:8900")
+    var resetAck: SocketAckEmitter?
 
     @IBAction func addEvent(sender: AnyObject) {
         let createEvent: CreateEvent = CreateEvent()
@@ -193,9 +196,17 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addHandlers()
+        socket.connect()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
+    func addHandlers() {
+        socket.on("hello") {data, ack in
+            print("Hello world!")
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
